@@ -56,17 +56,12 @@ class TwigRenderer
      */
     public function renderJavascript(EventInterface $event)
     {
-        if (
-            !$this->plugin->isEnabled() ||
-            (
-                isset($this->plugin->getConfiguration()['asynchronous']) &&
-                true === $this->plugin->getConfiguration()['asynchronous']
-            )
+        if ($this->pluginCanBeUsed($this->plugin, [
+            'asynchronous',
+        ])
         ) {
-            return;
+            $this->appendTemplate('@ElcodiPinterest/javascript.html.twig', $event);
         }
-
-        $this->appendTemplate('@ElcodiPinterest/javascript.html.twig', $event);
     }
 
     /**
@@ -76,15 +71,12 @@ class TwigRenderer
      */
     public function renderAsynchronousJavascript(EventInterface $event)
     {
-        if (
-            !$this->plugin->isEnabled() ||
-            !isset($this->plugin->getConfiguration()['asynchronous']) ||
-            false === $this->plugin->getConfiguration()['asynchronous']
+        if ($this->pluginCanBeUsed($this->plugin, [
+            'asynchronous',
+        ])
         ) {
-            return;
+            $this->appendTemplate('@ElcodiPinterest/javascript_asynchronous.html.twig', $event);
         }
-
-        $this->appendTemplate('@ElcodiPinterest/javascript_asynchronous.html.twig', $event);
     }
 
     /**
@@ -94,10 +86,9 @@ class TwigRenderer
      */
     public function renderPin(EventInterface $event)
     {
-        if (!$this->plugin->isEnabled()) {
-            return;
+        if ($this->pluginCanBeUsed($this->plugin)
+        ) {
+            $this->appendTemplate('@ElcodiPinterest/product_pin.html.twig', $event);
         }
-
-        $this->appendTemplate('@ElcodiPinterest/product_pin.html.twig', $event);
     }
 }
